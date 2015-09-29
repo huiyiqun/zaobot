@@ -1,5 +1,6 @@
 import telebot
 import logging
+import threading
 from datetime import datetime
 
 telebot.logger.setLevel(logging.DEBUG)
@@ -14,6 +15,7 @@ def get_today():
 
 today = get_today()
 waken_guys = []
+lock = threading.Lock()
 
 bot = telebot.TeleBot(readfile('token.txt'))
 
@@ -23,17 +25,18 @@ def send_welcome(message):
 
 @bot.message_handler(commands=['zao'])
 def zao(message):
-    global today, waken_guys
-    if today != get_today():
-        today = get_today()
-        waken_guys = []
-    if message.from_user.id in waken_guys:
-        bot.reply_to(message, "Pia!<(=ｏ ‵-′)ノ☆ 你不是起床过了吗?")
-    else:
-        if len(waken_guys) == 0:
-            bot.reply_to(message, "<(=ㄒ﹏ㄒ=)> 获得成就[最早起床]")
+    global today, waken_guys, lock
+    with lock:
+        if today != get_today():
+            today = get_today()
+            waken_guys = []
+        if message.from_user.id in waken_guys:
+            bot.reply_to(message, "Pia!<(=ｏ ‵-′)ノ☆ 你不是起床过了吗?")
         else:
-            bot.reply_to(message, "你是第{:d}起床的少年".format(len(waken_guys)+1))
-        waken_guys.append(message.from_user.id)
+            if len(waken_guys) == 0:
+                bot.reply_to(message, "<(=ㄒ﹏ㄒ=)> 获得成就[最早起床]")
+            else:
+                bot.reply_to(message, "你是第{:d}起床的少年".format(len(waken_guys)+1))
+            waken_guys.append(message.from_user.id)
 
 bot.polling()
