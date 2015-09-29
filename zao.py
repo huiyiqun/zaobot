@@ -23,7 +23,7 @@ bot = telebot.TeleBot(readfile('token.txt'))
 @bot.message_handler(func=lambda message: stop)
 def sleep(message):
     global stop_until, stop
-    if stop_until > datetime.now():
+    if stop_until < datetime.now():
         stop = False
         bot.send_message(message.chat.id, "<(=ㄒ﹏ㄒ=)> 终于从臭水沟里爬出来了")
 
