@@ -17,13 +17,13 @@ today = get_today()
 waken_guys = []
 lock = threading.Lock()
 stop = False
-stop_util = None
+stop_until = None
 bot = telebot.TeleBot(readfile('token.txt'))
 
 @bot.message_handler(func=lambda message: stop)
 def sleep(message):
-    global stop_util, stop
-    if stop_util > datetime.now():
+    global stop_until, stop
+    if stop_until > datetime.now():
         stop = False
         send_message(message.chat.id, "<(=ㄒ﹏ㄒ=)> 终于从臭水沟里爬出来了")
 
@@ -49,9 +49,9 @@ def zao(message):
 
 @bot.message_handler(commands=['bug'])
 def bug(message):
-    global stop
+    global stop, stop_until
     stop = True
-    stop_utils = datetime.now() + timedelta(minutes=5)
+    stop_until = datetime.now() + timedelta(minutes=5)
     bot.reply_to(message, "烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫...")
 
 @bot.message_handler(commands=['bot'])
