@@ -25,7 +25,7 @@ def sleep(message):
     global stop_until, stop
     if stop_until > datetime.now():
         stop = False
-        send_message(message.chat.id, "<(=ㄒ﹏ㄒ=)> 终于从臭水沟里爬出来了")
+        bot.send_message(message.chat.id, "<(=ㄒ﹏ㄒ=)> 终于从臭水沟里爬出来了")
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
