@@ -58,3 +58,6 @@ target/
 
 # Virtualenv
 venv/
+
+# Toekn for bot
+token.txt
