@@ -5,7 +5,7 @@ telebot.logger.setLevel(logging.DEBUG)
 
 def readfile(filename):
     with open(filename, 'r') as f:
-        return f.read()
+        return f.read().strip()
 
 bot = telebot.TeleBot(readfile('token.txt'))
 
