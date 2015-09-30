@@ -14,7 +14,7 @@ def allow_type(type_list):
         def wrapped(self, *args, **kwargs):
             message = kwargs.get('message', None) or args[0]
             if message.content_type not in type_list:
-                msg = self.bot.reply_to(message, 'Ooops, 类型不太对')
+                self.bot.reply_to(message, 'Ooops, 类型不太对')
                 return
             return f(self, *args, **kwargs)
         return wrapped
@@ -35,24 +35,23 @@ class EventBot(TimerBot):
         self.created_events = {} # Map chat_id to map(title as key) of created events
         super().__init__(*args, **kwargs)
 
-    def create_event(self, message, event):
-        if message.chat.id not in self.created_events:
-            self.created_events[message.chat.id] = {}
-        self.created_events[message.chat.id][event.title] = event
+    def create_event(self, chat, event):
+        if chat.id not in self.created_events:
+            self.created_events[chat.id] = {}
+        self.created_events[chat.id][event.title] = event
         # TODO: Schedule event
         for advance, note in self.plan:
-            self.sched.add_job(self.remind_event, 'date', (message, event, note),
+            self.sched.add_job(self.remind_event, 'date', (chat, event, note),
                                run_date=event.time-advance)
-        self.sched.add_job(self.delete_event, 'date', (message, event),
+        self.sched.add_job(self.delete_event, 'date', (chat, event),
                            run_date=event.time)
-        self.bot.reply_to(message, '吼~')
 
-    def delete_event(self, message, event):
-        del self.created_events[message.chat.id][event.title]
+    def delete_event(self, chat, event):
+        del self.created_events[chat.id][event.title]
 
-    def remind_event(self, message, event, note):
+    def remind_event(self, chat, event, note):
         self.bot.send_message(
-            message.chat.id,
+            chat.id,
             '[{}]还有{}, {}'.format(event.title, event.time - datetime.now(), note))
 
     def list_event(self, chat):
@@ -83,4 +82,5 @@ class EventBot(TimerBot):
             return
 
         del self.current_events[message.chat.id]
-        self.create_event(message, event)
+        self.create_event(chat, event)
+        self.bot.reply_to(message, '吼~')
