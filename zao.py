@@ -2,8 +2,12 @@ import telebot
 import logging
 import threading
 from datetime import datetime, timedelta
+from apscheduler.schedulers.background import BackgroundScheduler
+from plugins.bot import BotBot
 
 telebot.logger.setLevel(logging.DEBUG)
+
+sched = BackgroundScheduler()
 
 def readfile(filename):
     with open(filename, 'r') as f:
@@ -54,8 +58,6 @@ def bug(message):
     stop_until = datetime.now() + timedelta(minutes=5)
     bot.reply_to(message, "烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫...")
 
-@bot.message_handler(commands=['bot'])
-def hands_up(message):
-    bot.reply_to(message, "<(=°ο°=)> 出现了，这是一只圈养的bot")
+BotBot(bot, sched).bind()
 
 bot.polling()
