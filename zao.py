@@ -4,6 +4,7 @@ import threading
 from datetime import datetime, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
 from plugins.bot import BotBot
+from plugins.bug import BugBot
 
 telebot.logger.setLevel(logging.DEBUG)
 
@@ -24,12 +25,7 @@ stop = False
 stop_until = None
 bot = telebot.TeleBot(readfile('token.txt'))
 
-@bot.message_handler(func=lambda message: stop)
-def sleep(message):
-    global stop_until, stop
-    if stop_until < datetime.now():
-        stop = False
-        bot.send_message(message.chat.id, "<(=ㄒ﹏ㄒ=)> 终于从臭水沟里爬出来了")
+BugBot(bot, sched).bind()
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
@@ -51,13 +47,7 @@ def zao(message):
                 bot.reply_to(message, "你是第{:d}起床的少年".format(len(waken_guys)+1))
             waken_guys.append(message.from_user.id)
 
-@bot.message_handler(commands=['bug'])
-def bug(message):
-    global stop, stop_until
-    stop = True
-    stop_until = datetime.now() + timedelta(minutes=5)
-    bot.reply_to(message, "烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫...")
-
 BotBot(bot, sched).bind()
 
+sched.start()
 bot.polling()
