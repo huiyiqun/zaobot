@@ -33,4 +33,4 @@ class ZaoBot(TimerBot):
                 if index == 0:
                     self.bot.reply_to(message, "<(=ㄒ﹏ㄒ=)> 获得成就[最早起床]")
                 else:
-                    self.bot.reply_to(message, "你是第{:d}起床的少年".format(index))
+                    self.bot.reply_to(message, "你是第{:d}起床的少年".format(index+1))
