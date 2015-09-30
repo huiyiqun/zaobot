@@ -36,3 +36,9 @@ then save the token to token.txt
 ```
 (venv)$ python start.py
 ```
+
+TODO
+----
+
+* persistent storage with redis
+* flush messages when booting
