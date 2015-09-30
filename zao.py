@@ -6,6 +6,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from plugins.bot import BotBot
 from plugins.bug import BugBot
 from plugins.zao import ZaoBot
+from plugins.help import HelpBot
 
 telebot.logger.setLevel(logging.DEBUG)
 
@@ -19,10 +20,7 @@ bot = telebot.TeleBot(readfile('token.txt'))
 BugBot(bot, sched).bind()
 ZaoBot(bot, sched).bind()
 BotBot(bot, sched).bind()
-
-@bot.message_handler(commands=['start', 'help'])
-def send_welcome(message):
-    bot.reply_to(message, "大家好，我是周树人")
+HelpBot(bot, sched).bind()
 
 sched.start()
 bot.polling()
