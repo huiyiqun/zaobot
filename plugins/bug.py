@@ -21,7 +21,7 @@ class BugBot(TimerBot):
             # FIXME: Race-condition
             self.sleeping = True
             self.sleeping_place = message
-            self.sched.add_job(self.wake, 'date', run_date=datetime.now()+timedelta(seconds=30))
+            self.sched.add_job(self.wake, 'date', run_date=datetime.now()+timedelta(minutes=10))
             self.bot.reply_to(message, "烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫烫...")
 
     def wake(self):
