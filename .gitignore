@@ -59,5 +59,8 @@ target/
 # Virtualenv
 venv/
 
+# vim
+.*.swp
+
 # Toekn for bot
 token.txt
