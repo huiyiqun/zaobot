@@ -7,26 +7,26 @@ from threading import Lock
 
 class ZaoBot(TimerBot):
     def __init__(self, *args, **kwargs):
-        self.waken_guys = []
+        self.waken_guys = dict()
         self.lock = Lock()
         super().__init__(*args, **kwargs)
 
     def bind(self):
         @self.sched.scheduled_job('cron', hour='3')
         def clear_guys():
-            self.waken_guys = []
+            self.waken_guys = dict()
         
         @self.bot.message_handler(commands=['zao'])
         def bug(message):
             with self.lock:
+                index = len(self.waken_guys)
                 if message.from_user.id not in self.waken_guys:
-                    self.waken_guys.append(message.from_user.id)
+                    self.waken_guys[message.from_user.id] = datetime.now()
                     rewaken = False
                 else:
                     rewaken = True
 
             # Send response
-            index = self.waken_guys.index(message.from_user.id)
             if rewaken:
                 self.bot.reply_to(message, "Pia!<(=ｏ ‵-′)ノ☆ 你不是起床过了吗?")
             else:
