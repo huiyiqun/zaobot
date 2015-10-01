@@ -42,3 +42,4 @@ TODO
 
 * persistent storage with redis
 * flush messages when booting
+* list time of waking
