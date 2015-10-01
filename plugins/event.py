@@ -82,5 +82,5 @@ class EventBot(TimerBot):
             return
 
         del self.current_events[message.chat.id]
-        self.create_event(chat, event)
+        self.create_event(message.chat, event)
         self.bot.reply_to(message, '吼~')
