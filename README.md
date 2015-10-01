@@ -40,6 +40,6 @@ then save the token to token.txt
 TODO
 ----
 
-* persistent storage with redis
-* flush messages when booting
-* list time of waking
+* [ ] persistent storage with redis
+* [ ] flush messages when booting
+* [x] list time of waking
