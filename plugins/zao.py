@@ -28,7 +28,7 @@ class ZaoBot(TimerBot):
             if sorted_guys:
                 self.bot.reply_to(
                         message,
-                        '\n'.join(map(lambda guy: str(guy[0]) + ': ' + guy[1], sorted_guys)))
+                        '\n'.join(map(lambda guy: guy[1] + ': ' + str(guy[0]), sorted_guys)))
             else:
                 self.bot.reply_to(message, 'o<<(≧口≦)>>o 还没人起床')
         
