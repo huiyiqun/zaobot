@@ -16,7 +16,7 @@ to implement time-related jobs.
 Requirements
 ------------
 
-Python3 needed.(tested on python3.4)
+Python3 needed.(tested on python3.5)
 
 Installation
 ------------
@@ -40,6 +40,6 @@ then save the token to token.txt
 TODO
 ----
 
-* [ ] persistent storage with redis
+* [x] persistent storage with redis
 * [ ] flush messages when booting
 * [x] list time of waking
