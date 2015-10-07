@@ -61,7 +61,7 @@ class EventBot(TimerBot):
         @self.bot.message_handler(commands=['addevent'])
         def add_event(message):
             msg = self.bot.reply_to(message, 'OK，有啥新活动？',
-                                    reply_markup=teletypes.ForceReply())
+                                    reply_markup=teletypes.ForceReply(selective=True))
             self.current_events[message.chat.id] = Event()
             self.bot.register_for_reply(msg, self.step_event_title)
 
@@ -70,7 +70,7 @@ class EventBot(TimerBot):
         event = self.current_events[message.chat.id]
         event.title = message.text
         msg = self.bot.reply_to(message, '啥时候呢？',
-                                reply_markup=teletypes.ForceReply())
+                                reply_markup=teletypes.ForceReply(selective=True))
         self.bot.register_for_reply(msg, self.step_event_time)
 
     @allow_type(['text'])
