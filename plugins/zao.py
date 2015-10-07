@@ -18,7 +18,7 @@ class ZaoBot(TimerBot):
         return sorted(self.waken_guys.values())
 
     def bind(self):
-        @self.sched.scheduled_job('cron', hour='3')
+        @self.sched.scheduled_job('cron', hour='5')
         def clear_guys():
             self.waken_guys = dict()
 
