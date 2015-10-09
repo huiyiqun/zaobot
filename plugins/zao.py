@@ -67,7 +67,7 @@ class ZaoBot(TimerBot):
                 rank = self.waken_guys.zrank(message.from_user.id)
                 index = self.waken_guys.zcard()
                 if rank is None:
-                    self.waken_guys.zadd(datetime.now().timestamp(), message.from_user.id)
+                    self.waken_guys.zadd(message.date, message.from_user.id)
                     rewaken = False
                 else:
                     rewaken = True
