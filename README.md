@@ -43,3 +43,4 @@ TODO
 * [x] persistent storage with redis
 * [ ] flush messages when booting
 * [x] list time of waking
+* [ ] recognize user with avatar
