@@ -44,3 +44,4 @@ TODO
 * [ ] flush messages when booting
 * [x] list time of waking
 * [ ] recognize user with avatar
+* [ ] random time to start a new day
