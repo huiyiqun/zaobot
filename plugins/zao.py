@@ -36,6 +36,9 @@ class ZaoBot(TimerBot):
         # logger.debug('list_guys: result after map is {}'.format(list(ret)))
         return list(ret)
 
+    def _who(self, user):
+        return '少年'
+
     def bind(self):
         @self.sched.scheduled_job('cron', hour='5')
         def clear_guys():
@@ -79,4 +82,4 @@ class ZaoBot(TimerBot):
                 if index == 0:
                     self.bot.reply_to(message, "<(=ㄒ﹏ㄒ=)> 获得成就[最早起床]")
                 else:
-                    self.bot.reply_to(message, "你是第{:d}起床的少年".format(index+1))
+                    self.bot.reply_to(message, "你是第{:d}起床的{}".format(index+1, self._who(message.from_user)))
