@@ -50,8 +50,8 @@ class ZaoBot(TimerBot):
             logger.debug('sorted_guys is {}'.format(list(sorted_guys)))
             if sorted_guys:
                 self.bot.reply_to(
-                        message,
-                        '\n'.join(map(lambda guy: '{}, {}'.format(*guy), sorted_guys)))
+                    message,
+                    '\n'.join(map(lambda i_guy: '{}. {}, {}'.format(i_guy[0]+1, *i_guy[1]), enumerate(sorted_guys))))
             else:
                 self.bot.reply_to(message, 'o<<(≧口≦)>>o 还没人起床')
 
