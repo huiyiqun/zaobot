@@ -43,8 +43,19 @@ class ZaoBot(TimerBot):
         return '少年'
 
     def new_day(self):
-        self.waken_guys = RedisVariable('zaobot:waken_guys:{}'.format(
-            str(date.today())))
+        today = str(date.today())
+        self.waken_guys = RedisVariable('zaobot:waken_guys:{}'.format(today))
+        self.sleep_guys = RedisVariable('zaobot:sleep_guys:{}'.format(today))
+
+    def save_user(self, user):
+        '''
+        save name of user to redis
+        '''
+        if user.last_name is None:
+            name = user.first_name
+        else:
+            name = '{} {}'.format(user.first_name, user.last_name)
+        self.guys_mapping.hset(user.id, name)
 
     def bind(self):
         @self.sched.scheduled_job('cron', hour='5')
@@ -66,16 +77,24 @@ class ZaoBot(TimerBot):
             else:
                 self.bot.reply_to(message, 'o<<(≧口≦)>>o 还没人起床')
 
-        @self.bot.message_handler(commands=['zao'])
-        def bug(message):
-            # save name to redis
-            if message.from_user.last_name is None:
-                name = message.from_user.first_name
+        @self.bot.message_handler(commands=['wan'])
+        def wan_handler(message):
+            self.save_user(message.from_user)
+            self.sleep_guys.zadd(message.date, message.from_user.id)
+            waken_time = self.waken_guys.zscore(message.from_user.id)
+            if waken_time is None:
+                self.bot.reply_to(message, "不起床就睡，睡死你好了～")
             else:
-                name = '{} {}'.format(
-                    message.from_user.first_name,
-                    message.from_user.last_name)
-            self.guys_mapping.hset(message.from_user.id, name)
+                waken_datetime = datetime.fromtimestamp(int(waken_time))
+                sleep_datetime = datetime.fromtimestamp(message.date)
+                duration = sleep_datetime - waken_datetime
+                self.bot.reply_to(
+                    message,
+                    "今日共清醒{}秒，辛苦了".format(duration.total_seconds()))
+
+        @self.bot.message_handler(commands=['zao'])
+        def zao_handler(message):
+            self.save_user(message.from_user)
 
             with self.lock:
                 # There seems no way to determine whether an element in
