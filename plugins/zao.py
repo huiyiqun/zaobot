@@ -62,14 +62,17 @@ class ZaoBot(TimerBot):
         def clear_guys():
             self.new_day()
 
-        @self.bot.message_handler(commands=['zaoguys'])
+        @self.bot.message_handler(commands=['zaoguys', 'zaobirds', 'zaobugs'])
         def list_guys(message):
             sorted_guys = self._list_guys()
             logger.debug('sorted_guys is {}'.format(list(sorted_guys)))
+            prefix = ""
+            if message.text.startswith('/zaobugs'):
+                prefix = "被鸟儿吃掉的虫子:\n"
             if sorted_guys:
                 self.bot.reply_to(
                     message,
-                    '\n'.join(
+                    prefix + '\n'.join(
                         map(
                             lambda i_guy: '{}. {}, {}'.format(
                                 i_guy[0]+1, *i_guy[1]),
