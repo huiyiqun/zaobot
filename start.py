@@ -1,7 +1,5 @@
 import telebot
 import logging
-import threading
-from datetime import datetime, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
 from plugins.bot import BotBot
 from plugins.bug import BugBot
@@ -10,6 +8,7 @@ from plugins.help import HelpBot
 from plugins.event import EventBot
 
 telebot.logger.setLevel(logging.DEBUG)
+
 
 def readfile(filename):
     with open(filename, 'r') as f:

@@ -3,16 +3,18 @@ A simple plugin to record waken people and return order of waking.
 """
 import logging
 from . import TimerBot
-from datetime import datetime, timedelta, date
+from datetime import datetime, date
 from threading import Lock
 from redis_variable import RedisVariable
 
 logger = logging.getLogger(__name__)
 
+
 class ZaoBot(TimerBot):
     def __init__(self, *args, **kwargs):
         self.new_day()
-        self.guys_mapping = RedisVariable('zaobot:guys_mapping')  # map id to Name
+        # map id to Name
+        self.guys_mapping = RedisVariable('zaobot:guys_mapping')
         self.lock = Lock()
         super().__init__(*args, **kwargs)
 
@@ -22,6 +24,7 @@ class ZaoBot(TimerBot):
         '''
         result = self.waken_guys.zrange(0, -1, withscores=True)
         logger.debug('list_guys: result from redis is {}'.format(result))
+
         # Transform result from redis ( (timestamp(byte), id(byte)) )
         # to result we need ( (name(str), time(datetime)) )
         def trans_func(id_timestamp):
@@ -55,7 +58,11 @@ class ZaoBot(TimerBot):
             if sorted_guys:
                 self.bot.reply_to(
                     message,
-                    '\n'.join(map(lambda i_guy: '{}. {}, {}'.format(i_guy[0]+1, *i_guy[1]), enumerate(sorted_guys))))
+                    '\n'.join(
+                        map(
+                            lambda i_guy: '{}. {}, {}'.format(
+                                i_guy[0]+1, *i_guy[1]),
+                            enumerate(sorted_guys))))
             else:
                 self.bot.reply_to(message, 'o<<(≧口≦)>>o 还没人起床')
 
@@ -65,7 +72,9 @@ class ZaoBot(TimerBot):
             if message.from_user.last_name is None:
                 name = message.from_user.first_name
             else:
-                name = message.from_user.first_name + ' ' + message.from_user.last_name
+                name = '{} {}'.format(
+                    message.from_user.first_name,
+                    message.from_user.last_name)
             self.guys_mapping.hset(message.from_user.id, name)
 
             with self.lock:
@@ -86,4 +95,7 @@ class ZaoBot(TimerBot):
                 if index == 0:
                     self.bot.reply_to(message, "<(=ㄒ﹏ㄒ=)> 获得成就[最早起床]")
                 else:
-                    self.bot.reply_to(message, "你是第{:d}起床的{}".format(index+1, self._who(message.from_user)))
+                    self.bot.reply_to(
+                        message,
+                        "你是第{:d}起床的{}".format(
+                            index+1, self._who(message.from_user)))

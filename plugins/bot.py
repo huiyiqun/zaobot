@@ -3,6 +3,7 @@ A simple plugin to anounce that "I am a bot"
 """
 from . import TimerBot
 
+
 class BotBot(TimerBot):
     def bind(self):
         @self.bot.message_handler(commands=['bot'])

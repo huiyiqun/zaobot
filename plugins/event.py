@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 from telebot import types as teletypes
 from . import TimerBot
 
+
 # FIXME: instance method only
 def allow_type(type_list):
     def wrapper(f):
@@ -20,8 +21,10 @@ def allow_type(type_list):
         return wrapped
     return wrapper
 
+
 class Event:
     pass
+
 
 class EventBot(TimerBot):
 
@@ -31,8 +34,10 @@ class EventBot(TimerBot):
             (timedelta(seconds=3), "好了，开始happy吧。")]
 
     def __init__(self, *args, **kwargs):
-        self.current_events = {} # Map chat_id to event
-        self.created_events = {} # Map chat_id to map(title as key) of created events
+        # Map chat_id to event
+        self.current_events = {}
+        # Map chat_id to map(title as key) of created events
+        self.created_events = {}
         super().__init__(*args, **kwargs)
 
     def create_event(self, chat, event):
@@ -52,7 +57,8 @@ class EventBot(TimerBot):
     def remind_event(self, chat, event, note):
         self.bot.send_message(
             chat.id,
-            '[{}]还有{}, {}'.format(event.title, event.time - datetime.now(), note))
+            '[{}]还有{}, {}'.format(
+                event.title, event.time - datetime.now(), note))
 
     def list_event(self, chat):
         pass
@@ -60,8 +66,9 @@ class EventBot(TimerBot):
     def bind(self):
         @self.bot.message_handler(commands=['addevent'])
         def add_event(message):
-            msg = self.bot.reply_to(message, 'OK，有啥新活动？',
-                                    reply_markup=teletypes.ForceReply(selective=True))
+            msg = self.bot.reply_to(
+                message, 'OK，有啥新活动？',
+                reply_markup=teletypes.ForceReply(selective=True))
             self.current_events[message.chat.id] = Event()
             self.bot.register_for_reply(msg, self.step_event_title)
 
@@ -69,8 +76,9 @@ class EventBot(TimerBot):
     def step_event_title(self, message):
         event = self.current_events[message.chat.id]
         event.title = message.text
-        msg = self.bot.reply_to(message, '啥时候呢？',
-                                reply_markup=teletypes.ForceReply(selective=True))
+        msg = self.bot.reply_to(
+            message, '啥时候呢？',
+            reply_markup=teletypes.ForceReply(selective=True))
         self.bot.register_for_reply(msg, self.step_event_time)
 
     @allow_type(['text'])
@@ -78,7 +86,7 @@ class EventBot(TimerBot):
         event = self.current_events[message.chat.id]
         event.time = dateparser.parse(message.text)
         if event.time is None:
-            msg = self.bot.reply_to(message, '听不懂...')
+            self.bot.reply_to(message, '听不懂...')
             return
 
         del self.current_events[message.chat.id]
