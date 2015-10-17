@@ -3,7 +3,7 @@ A simple plugin to record waken people and return order of waking.
 """
 import logging
 from . import TimerBot
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from threading import Lock
 from redis_variable import RedisVariable
 
@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 class ZaoBot(TimerBot):
     def __init__(self, *args, **kwargs):
-        self.waken_guys = RedisVariable('zaobot:waken_guys')
+        self.new_day()
         self.guys_mapping = RedisVariable('zaobot:guys_mapping')  # map id to Name
         self.lock = Lock()
         super().__init__(*args, **kwargs)
@@ -39,10 +39,14 @@ class ZaoBot(TimerBot):
     def _who(self, user):
         return '少年'
 
+    def new_day(self):
+        self.waken_guys = RedisVariable('zaobot:waken_guys:{}'.format(
+            str(date.today())))
+
     def bind(self):
         @self.sched.scheduled_job('cron', hour='5')
         def clear_guys():
-            self.waken_guys.delete()
+            self.new_day()
 
         @self.bot.message_handler(commands=['zaoguys'])
         def list_guys(message):
