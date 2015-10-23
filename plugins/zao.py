@@ -74,7 +74,7 @@ class ZaoBot(TimerBot):
                     message,
                     prefix + '\n'.join(
                         map(
-                            lambda i_guy: '{}. {}, {}'.format(
+                            lambda i_guy: '{}. {}, {:%H:%M}'.format(
                                 i_guy[0]+1, *i_guy[1]),
                             enumerate(sorted_guys))))
             else:
@@ -127,12 +127,13 @@ class ZaoBot(TimerBot):
 
             # Send response
             if rewaken:
-                self.bot.reply_to(message, "Pia!<(=ｏ ‵-′)ノ☆ 你不是起床过了吗?")
+                self.bot.reply_to(message, "Pia!<(=ｏ‵-′)ノ☆  你不是起床过了吗?")
             else:
                 if index == 0:
-                    self.bot.reply_to(message, "<(=ㄒ﹏ㄒ=)> 获得成就[最早起床]")
+                    self.bot.reply_to(message, "✔ 获得成就[最早起床]")
                 else:
-                    self.bot.reply_to(
-                        message,
+                    self.bot.send_message(
+                        message.chat.id,
                         "你是第{:d}起床的{}".format(
-                            index+1, self._who(message.from_user)))
+                            index+1, self._who(message.from_user))
+                    )
