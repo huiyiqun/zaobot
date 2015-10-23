@@ -70,8 +70,8 @@ class ZaoBot(TimerBot):
             if message.text.startswith('/zaobugs'):
                 prefix = "被鸟儿吃掉的虫子:\n"
             if sorted_guys:
-                self.bot.reply_to(
-                    message,
+                self.bot.send_message(
+                    message.chat.id,
                     prefix + '\n'.join(
                         map(
                             lambda i_guy: '{}. {}, {:%H:%M}'.format(
