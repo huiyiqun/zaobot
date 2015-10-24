@@ -69,6 +69,8 @@ class ZaoBot(TimerBot):
             prefix = ""
             if message.text.startswith('/zaobugs'):
                 prefix = "被鸟儿吃掉的虫子:\n"
+            elif message.text.startswith('/zaobirds'):
+                prefix = "被大鹰吃掉的鸟儿:\n"
             if sorted_guys:
                 self.bot.send_message(
                     message.chat.id,
