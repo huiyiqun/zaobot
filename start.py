@@ -17,7 +17,7 @@ def readfile(filename):
 sched = BackgroundScheduler()
 bot = telebot.TeleBot(readfile('token.txt'))
 
-BugBot(bot, sched).bind()
+#BugBot(bot, sched).bind()
 ZaoBot(bot, sched).bind()
 BotBot(bot, sched).bind()
 HelpBot(bot, sched).bind()
