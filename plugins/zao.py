@@ -82,7 +82,7 @@ class ZaoBot(TimerBot):
             else:
                 self.bot.reply_to(message, 'o<<(≧口≦)>>o 还没人起床')
 
-        @self.bot.message_handler(commands=['wan'])
+        #@self.bot.message_handler(commands=['wan'])
         def wan_handler(message):
             self.save_user(message.from_user)
 
@@ -128,14 +128,15 @@ class ZaoBot(TimerBot):
                     rewaken = True
 
             # Send response
-            if rewaken:
-                self.bot.reply_to(message, "Pia!<(=ｏ‵-′)ノ☆  你不是起床过了吗?")
-            else:
-                if index == 0:
-                    self.bot.reply_to(message, "✔ 获得成就[最早起床]")
+            if message.chat.type == 'private':
+                if rewaken:
+                    self.bot.reply_to(message, "Pia!<(=ｏ‵-′)ノ☆  你不是起床过了吗?")
                 else:
-                    self.bot.send_message(
-                        message.chat.id,
-                        "你是第{:d}起床的{}".format(
-                            index+1, self._who(message.from_user))
-                    )
+                    if index == 0:
+                        self.bot.reply_to(message, "✔ 获得成就[最早起床]")
+                    else:
+                        self.bot.send_message(
+                            message.chat.id,
+                            "你是第{:d}起床的{}".format(
+                                index+1, self._who(message.from_user))
+                        )
