@@ -24,4 +24,4 @@ HelpBot(bot, sched).bind()
 EventBot(bot, sched).bind()
 
 sched.start()
-bot.polling(none_stop=True)
+bot.polling()
