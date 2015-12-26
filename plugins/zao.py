@@ -72,7 +72,7 @@ class ZaoBot(TimerBot):
                 try:
                     date = parse_date(date_str)
                     waken_guys = RedisVariable(
-                        'zaobot:waken_guys:{}'.format(date))
+                        'zaobot:waken_guys:{}'.format(date.date()))
                 except ValueError:
                     self.bot.reply_to(message, '听不懂<(=－︿－=)>')
                     return
@@ -83,6 +83,7 @@ class ZaoBot(TimerBot):
                 prefix = "被鸟儿吃掉的虫子:\n"
             elif message.text.startswith('/zaobirds'):
                 prefix = "被大鹰吃掉的鸟儿:\n"
+
             if sorted_guys:
                 self.bot.send_message(
                     message.chat.id,
