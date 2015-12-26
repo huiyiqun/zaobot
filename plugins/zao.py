@@ -67,7 +67,7 @@ class ZaoBot(TimerBot):
         def list_guys(message):
             date_str = ZaoBot.retrieve_args(message)
             if date_str is None:
-                waken_guys = self._waken_guys
+                waken_guys = self.waken_guys
             else:
                 try:
                     date = parse_date(date_str)
