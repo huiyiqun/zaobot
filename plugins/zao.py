@@ -4,6 +4,7 @@ A simple plugin to record waken people and return order of waking.
 import logging
 from . import TimerBot
 from datetime import datetime, date
+from dateutil.parser import parse as parse_date
 from threading import Lock
 from redis_variable import RedisVariable
 
@@ -18,11 +19,11 @@ class ZaoBot(TimerBot):
         self.lock = Lock()
         super().__init__(*args, **kwargs)
 
-    def _list_guys(self):
+    def _list_guys(self, waken_guys):
         '''
         return list of guys as tuple(`name`, `time`) which is sorted by date
         '''
-        result = self.waken_guys.zrange(0, -1, withscores=True)
+        result = waken_guys.zrange(0, -1, withscores=True)
         logger.debug('list_guys: result from redis is {}'.format(result))
 
         # Transform result from redis ( (timestamp(byte), id(byte)) )
@@ -64,7 +65,18 @@ class ZaoBot(TimerBot):
 
         @self.bot.message_handler(commands=['zaoguys', 'zaobirds', 'zaobugs'])
         def list_guys(message):
-            sorted_guys = self._list_guys()
+            date_str = ZaoBot.retrieve_args(message)
+            if date_str is None:
+                waken_guys = self._waken_guys
+            else:
+                try:
+                    date = parse_date(date_str)
+                    waken_guys = RedisVariable(
+                        'zaobot:waken_guys:{}'.format(date))
+                except ValueError:
+                    self.bot.reply_to(message, '听不懂<(=－︿－=)>')
+                    return
+            sorted_guys = self._list_guys(waken_guys)
             logger.debug('sorted_guys is {}'.format(list(sorted_guys)))
             prefix = ""
             if message.text.startswith('/zaobugs'):
