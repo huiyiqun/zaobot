@@ -3,7 +3,8 @@ class TimerBot:
         self.bot = bot
         self.sched = sched
 
-    def retrieve_args(klass, message):
+    @staticmethod
+    def retrieve_args(message):
         cmd = message.text.split(maxsplit=1)
         if len(cmd) == 1:
             return None
