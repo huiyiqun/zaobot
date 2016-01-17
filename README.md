@@ -6,7 +6,7 @@ who engraved a "**早**" on his desktop. Since then,
 there has been so many warriors who try to write
 "**早**" to any place...
 
-This is a telegram bot which allow you to say hello
+This is a telegram bot which allows you to say hello
 to the world and know number of people who wake up ealier
 than you.
 
