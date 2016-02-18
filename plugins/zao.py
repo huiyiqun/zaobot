@@ -81,7 +81,7 @@ class ZaoBot(TimerBot):
                 if len(args) == 1:
                     self.bot.send_message(
                         message.chat.id,
-                        self._verbose(message.chat))
+                        self._verbose_chat(message.chat))
                 else:
                     self.verbose_option.hset(message.chat.id, args[1])
 
