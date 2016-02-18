@@ -24,7 +24,7 @@ class ZaoBot(TimerBot):
         verbose = self.verbose_option.hget(chat.id)
         logger.debug('verbose_chat: result from redis is {}'.format(verbose))
         if verbose is not None:
-            return verbose.lower() in ('yes', 'true', 'on')
+            return verbose.decode(encoding='UTF-8').lower() in ('yes', 'true', 'on')
         else:
             return chat.type == 'private'
 
