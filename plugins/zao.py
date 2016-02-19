@@ -17,7 +17,16 @@ class ZaoBot(TimerBot):
         # map id to Name
         self.guys_mapping = RedisVariable('zaobot:guys_mapping')
         self.lock = Lock()
+        self.verbose_option = RedisVariable('zaobot:verbose_option')
         super().__init__(*args, **kwargs)
+
+    def _verbose_chat(self, chat):
+        verbose = self.verbose_option.hget(chat.id)
+        logger.debug('verbose_chat: result from redis is {}'.format(verbose))
+        if verbose is not None:
+            return verbose.decode(encoding='UTF-8').lower() in ('yes', 'true', 'on')
+        else:
+            return chat.type == 'private'
 
     def _list_guys(self, waken_guys):
         '''
@@ -62,6 +71,20 @@ class ZaoBot(TimerBot):
         @self.sched.scheduled_job('cron', hour='5')
         def clear_guys():
             self.new_day()
+
+        @self.bot.message_handler(commands=['option'])
+        def option(message):
+            args = ZaoBot.retrieve_args(message).split(' ')
+            if len(args) == 0:
+                return
+
+            if args[0] == 'verbose':
+                if len(args) == 1:
+                    self.bot.send_message(
+                        message.chat.id,
+                        self._verbose_chat(message.chat))
+                else:
+                    self.verbose_option.hset(message.chat.id, args[1])
 
         @self.bot.message_handler(commands=['zaoguys', 'zaobirds', 'zaobugs'])
         def list_guys(message):
@@ -141,7 +164,7 @@ class ZaoBot(TimerBot):
                     rewaken = True
 
             # Send response
-            if message.chat.type == 'private':
+            if self._verbose_chat(message.chat):
                 if rewaken:
                     self.bot.reply_to(message, "Pia!<(=ｏ‵-′)ノ☆  你不是起床过了吗?")
                 else:
