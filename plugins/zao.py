@@ -95,7 +95,7 @@ class ZaoBot(TimerBot):
             else:
                 self.bot.reply_to(message, 'o<<(≧口≦)>>o 还没人起床')
 
-        #@self.bot.message_handler(commands=['wan'])
+        @self.bot.message_handler(commands=['wan'])
         def wan_handler(message):
             self.save_user(message.from_user)
 
