@@ -74,9 +74,11 @@ class ZaoBot(TimerBot):
 
         @self.bot.message_handler(commands=['option'])
         def option(message):
-            args = ZaoBot.retrieve_args(message).split(' ')
-            if len(args) == 0:
+            tmp = ZaoBot.retrieve_args(message)
+            if tmp is None:
                 return
+
+            args = tmp.split(' ')
 
             if args[0] == 'verbose':
                 if len(args) == 1:
