@@ -140,7 +140,8 @@ class ZaoBot(TimerBot):
                 duration = sleep_datetime - waken_datetime
                 self.bot.reply_to(
                     message,
-                    "今日共清醒{}秒，辛苦了".format(duration.total_seconds()))
+                    "今日共清醒{}秒，辛苦了".format(
+                        str(duration).replace(':', '小时', 1).replace(':', '分', 1)))
             else:
                 first_sleep_datetime = datetime.fromtimestamp(int(first_sleep))
                 this_sleep_datetime = datetime.fromtimestamp(message.date)
@@ -148,7 +149,7 @@ class ZaoBot(TimerBot):
                 self.bot.reply_to(
                     message,
                     "关机失败{}秒 Pia!<(=ｏ ‵-′)ノ☆".format(
-                        duration.total_seconds()))
+                        str(duration).replace(':', '小时', 1).replace(':', '分', 1)))
 
         @self.bot.message_handler(commands=['zao'])
         def zao_handler(message):
