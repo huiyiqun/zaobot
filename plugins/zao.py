@@ -49,14 +49,31 @@ class ZaoBot(TimerBot):
         # logger.debug('list_guys: result after map is {}'.format(list(ret)))
         return list(ret)
 
-    def _who(self, user):
-        return '少年'
-
+    def _who(self, message):
+        if message.text.startswith('/zaobugs'):
+            return "虫子"
+        elif message.text.startswith('/zaobirds'):
+            prefix = "鸟儿"
+        elif message.text.startswith('/zaosheeps'):
+            prefix = "小羊羔"
+        else:
+            return "少年"
+            
+    def _zaoText(self, message):
+        if message.text.startswith('/zaobugs'):
+            return ",然后被鸟儿吃掉。"
+        elif message.text.startswith('/zaobirds'):
+            prefix = "然后被大鹰吃掉。"
+        elif message.text.startswith('/zaosheeps'):
+            prefix = "然后被萌狼吃掉。"
+        else:
+            return ""
+                    
     def new_day(self):
         today = str(date.today())
         self.waken_guys = RedisVariable('zaobot:waken_guys:{}'.format(today))
         self.sleep_guys = RedisVariable('zaobot:sleep_guys:{}'.format(today))
-
+        
     def save_user(self, user):
         '''
         save name of user to redis
@@ -88,7 +105,7 @@ class ZaoBot(TimerBot):
                 else:
                     self.verbose_option.hset(message.chat.id, args[1])
 
-        @self.bot.message_handler(commands=['zaoguys', 'zaobirds', 'zaobugs'])
+        @self.bot.message_handler(commands=['zaoguys', 'zaobirds', 'zaobugs', 'zaosheeps'])
         def list_guys(message):
             date_str = ZaoBot.retrieve_args(message)
             if date_str is None:
@@ -154,7 +171,7 @@ class ZaoBot(TimerBot):
                         "关机失败{}秒 Pia!<(=ｏ ‵-′)ノ☆".format(
                             str(duration).replace(':', '小时', 1).replace(':', '分', 1)))
 
-        @self.bot.message_handler(commands=['zao'])
+        @self.bot.message_handler(commands=['zao', 'zaobug', 'zaobird', 'zaosheep'])
         def zao_handler(message):
             self.save_user(message.from_user)
 
@@ -179,6 +196,6 @@ class ZaoBot(TimerBot):
                     else:
                         self.bot.send_message(
                             message.chat.id,
-                            "你是第{:d}起床的{}".format(
-                                index+1, self._who(message.from_user))
+                            "你是第{:d}起床的{}{}".format(
+                                index+1, self._who(message), self._zaoText(message))
                         )
