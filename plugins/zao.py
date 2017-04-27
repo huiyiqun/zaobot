@@ -26,7 +26,8 @@ class ZaoBot(TimerBot):
         if verbose is not None:
             return verbose.decode(encoding='UTF-8').lower() in ('yes', 'true', 'on')
         else:
-            return chat.type == 'private'
+            # default to verbose
+            return True
 
     def _list_guys(self, waken_guys):
         '''
