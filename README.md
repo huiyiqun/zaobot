@@ -7,8 +7,8 @@ there has been so many warriors who try to write
 "**早**" to any place...
 
 This is a telegram bot which allows you to say hello
-to the world and know number of people who wake up ealier
-than you.
+to the world and know the number of people who wake up
+ealier than you.
 
 In fact, this bot is pluggable, and easy to write plugins
 to implement time-related jobs.
