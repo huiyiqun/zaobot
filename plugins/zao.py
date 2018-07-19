@@ -51,21 +51,21 @@ class ZaoBot(TimerBot):
         return list(ret)
 
     def _who(self, message):
-        if message.text.startswith('/zaobugs'):
+        if message.text.startswith('/zaobug'):
             return "虫子"
-        elif message.text.startswith('/zaobirds'):
+        elif message.text.startswith('/zaobird'):
             prefix = "鸟儿"
-        elif message.text.startswith('/zaosheeps'):
+        elif message.text.startswith('/zaosheep'):
             prefix = "小羊羔"
         else:
             return "少年"
             
     def _zaoText(self, message):
-        if message.text.startswith('/zaobugs'):
+        if message.text.startswith('/zaobug'):
             return ",然后被鸟儿吃掉。"
-        elif message.text.startswith('/zaobirds'):
+        elif message.text.startswith('/zaobird'):
             prefix = "然后被大鹰吃掉。"
-        elif message.text.startswith('/zaosheeps'):
+        elif message.text.startswith('/zaosheep'):
             prefix = "然后被萌狼吃掉。"
         else:
             return ""
