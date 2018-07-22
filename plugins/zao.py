@@ -54,9 +54,9 @@ class ZaoBot(TimerBot):
         if message.text.startswith('/zaobug'):
             return "虫子"
         elif message.text.startswith('/zaobird'):
-            prefix = "鸟儿"
+            return "鸟儿"
         elif message.text.startswith('/zaosheep'):
-            prefix = "小羊羔"
+            return "小羊羔"
         else:
             return "少年"
             
@@ -64,9 +64,9 @@ class ZaoBot(TimerBot):
         if message.text.startswith('/zaobug'):
             return ",然后被鸟儿吃掉。"
         elif message.text.startswith('/zaobird'):
-            prefix = "然后被大鹰吃掉。"
+            return "然后被大鹰吃掉。"
         elif message.text.startswith('/zaosheep'):
-            prefix = "然后被萌狼吃掉。"
+            return "然后被萌狼吃掉。"
         else:
             return ""
                     
